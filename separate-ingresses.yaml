@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: coffee-ingress-1
+  annotations:
+    kubernetes.io/ingress.class: ingress-coffee
+    nginx.ingress.kubernetes.io/rewrite-target: /coffee1/$1
+spec:
+  rules:
+    - host: coffee.example.com
+      http:
+        paths:
+          - path: /coffee
+            backend:
+              serviceName: coffee-svc
+              servicePort: 80
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: coffee-ingress-2
+  annotations:
+    kubernetes.io/ingress.class: ingress-coffee
+    nginx.ingress.kubernetes.io/rewrite-target: /coffee2/$1
+spec:
+  rules:
+    - host: coffee.example.com
+      http:
+        paths:
+          - path: /coffee
+            backend:
+              serviceName: coffee-svc
+              servicePort: 80
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tea-ingress
+  annotations:
+    kubernetes.io/ingress.class: ingress-tea
+spec:
+  rules:
+    - host: tea.example.com
+      http:
+        paths:
+          - path: /tea
+            backend:
+              serviceName: tea-svc
+              servicePort: 80
