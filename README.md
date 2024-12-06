@@ -9,7 +9,8 @@
 ```
 kubectl create namespace ingress-debug
 kubectl config set-context $(kubectl config current-context) --namespace=ingress-debug
-helm install stable/nginx-ingress --name my-ingress-debug
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm install my-ingress-debug ingress-nginx/ingress-nginx
 ```
 
 # Check ingress is deployed
@@ -21,7 +22,7 @@ curl $K8S_CLUSTER_IP
 
 # Check NGINX ingress version
 ```
-POD_NAME=$(kubectl get pods -l app=nginx-ingress -o jsonpath='{.items[0].metadata.name}')
+POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=ingress-nginx -o jsonpath='{.items[0].metadata.name}')
 kubectl exec -it $POD_NAME -- /nginx-ingress-controller --version
 ```
 
@@ -33,7 +34,7 @@ kubectl create -f cafe-ingress.yaml
 
 # Test deployed application
 ```
-kubectl get services my-ingress-debug-nginx-ingress-controller
+kubectl get services my-ingress-debug-ingress-nginx-controller
 NAME                                        TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
 my-ingress-debug-nginx-ingress-controller   LoadBalancer   XX.YY.ZZ.AA      <pending>     80:30867/TCP,443:30879/TCP   1m
 APP_PORT=30867
